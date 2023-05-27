@@ -1,8 +1,10 @@
 import useLoginModel from "@/hooks/useLoginModel";
+import { signIn } from "next-auth/react";
 import { useCallback, useState } from "react";
 import Input from "../input";
 import Model from "../Model";
 import useRegisterModel from "@/hooks/useRegisterModel";
+
 const LoginModels = () => {
   const LoginModel = useLoginModel();
   const registerModel = useRegisterModel();
@@ -23,17 +25,23 @@ const LoginModels = () => {
     try {
       setIsLoading(true);
       // Add Todo log in
+      await signIn("credentials", {
+        email,
+        password,
+      });
+
       LoginModel.onClose();
     } catch (error) {
       console.log(error);
     } finally {
       setIsLoading(false);
     }
-  }, [LoginModel]);
+  }, [LoginModel, email, password]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Input
+        type="email"
         placeholder="Email"
         onChange={(e) => setEmail(e.target.value)}
         value={email}
@@ -41,6 +49,7 @@ const LoginModels = () => {
       />
       <Input
         placeholder="Password"
+        type="password"
         onChange={(e) => setPassword(e.target.value)}
         value={password}
         disabled={isloading}
