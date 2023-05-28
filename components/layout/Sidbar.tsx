@@ -19,11 +19,13 @@ const Sibar = () => {
       label: "Notfications",
       href: "/notfications",
       icon: BsBellFill,
+      auth: true,
     },
     {
       label: "Profile",
       href: "/users/123",
       icon: FaUser,
+      auth: true,
     },
   ];
   return (
@@ -37,6 +39,7 @@ const Sibar = () => {
               href={item.href}
               label={item.label}
               icon={item.icon}
+              auth={item.auth}
             />
           ))}
           {currentUser &&  <SidebarItem onClick={() => signOut()} icon={BiLogOut} label="Logout" />} 
