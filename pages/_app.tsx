@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import { SessionProvider } from "next-auth/react";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
+import EditModel from "@/components/models/EditModel";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -13,6 +14,7 @@ export default function App({ Component, pageProps }: AppProps) {
       {/* <Model actionLabel="Submit" isOpen title="Test model"/> */}
       <SessionProvider session={pageProps.session}>
         <Toaster/>
+        <EditModel/>
         <RegisterModels />
         <LoginModels />
         <Layout>

@@ -10,8 +10,9 @@ export default async function handler(
   }
 
   try {
-    const { currentUser } = await serverAuth(req); 
-    // we are going to extract the current user from the library which we just created in serverAuth
+   // const { currentUser } = await serverAuth(req); 
+   const { currentUser } = await serverAuth(req, res);
+   // we are going to extract the current user from the library which we just created in serverAuth
 
     return res.status(200).json(currentUser);
   } catch (error) {
