@@ -6,54 +6,47 @@ import usePosts from "./usePosts";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 
-const useLike = ({ postId, userId }: { postId: string; userId?: string }) => {
+const useLike = ({ postId, userId }: { postId: string, userId?: string }) => {
   const { data: currentUser } = useCurrentUser();
   const { data: fetchedPost, mutate: mutateFetchedPost } = usePost(postId);
   const { mutate: mutateFetchedPosts } = usePosts(userId);
 
-  const loginModel = useLoginModel();
+  const loginModal = useLoginModel();
 
   const hasLiked = useMemo(() => {
     const list = fetchedPost?.likedIds || [];
 
     return list.includes(currentUser?.id);
-  }, [currentUser?.id, fetchedPost?.likedIds]);
+  }, [fetchedPost, currentUser]);
 
   const toggleLike = useCallback(async () => {
     if (!currentUser) {
-      return loginModel.onOpen;
+      return loginModal.onOpen();
     }
 
     try {
       let request;
 
       if (hasLiked) {
-        request = () => axios.delete("/api/like", { data: { postId } });
+        request = () => axios.delete('/api/like', { data: { postId } });
       } else {
-        request = () => axios.post("/api/like", { postId });
+        request = () => axios.post('/api/like', { postId });
       }
 
       await request();
-      mutateFetchedPosts();
       mutateFetchedPost();
+      mutateFetchedPosts();
 
-      toast.success("Success");
+      toast.success('Success');
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error('Something went wrong');
     }
-  }, [
-    currentUser,
-    hasLiked,
-    postId,
-    mutateFetchedPost,
-    mutateFetchedPosts,
-    loginModel
-  ]);
+  }, [currentUser, hasLiked, postId, mutateFetchedPosts, mutateFetchedPost, loginModal]);
 
   return {
     hasLiked,
-    toggleLike
+    toggleLike,
   }
-};
+}
 
 export default useLike;
